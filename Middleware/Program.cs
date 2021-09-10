@@ -1,27 +1,27 @@
-﻿var pipeline = new Pipeline()
-    .Use((context, next) =>
-    {
-        Console.WriteLine($"Middleware 1: {context.Data}");
-        return next();
-    })
-    .Use((context, next) =>
-    {
-        Console.WriteLine($"Middleware 2: {context.Data}");
-        return next();
-    })
-    .Run(context =>
-    {
-        Console.WriteLine($"Middleware 3: {context.Data}");
-        return Task.CompletedTask;
-    });
+var pipeline = new Pipeline()
+   .Use((context, next) =>
+   {
+       Console.WriteLine($"Middleware 1: {context.Data++}");
+       return next();
+   })
+   .Use((context, next) =>
+   {
+       Console.WriteLine($"Middleware 2: {context.Data++}");
+       return next();
+   })
+   .Run(context =>
+   {
+       Console.WriteLine($"Middleware 3: {context.Data++}");
+       return Task.CompletedTask;
+   });
 
 var app = pipeline.Build();
 
-await app(new() { Data = "Example" });
+await app(new());
 
 class PipelineContext
 {
-    public string? Data { get; set; }
+    public int Data { get; set; }
 }
 
 delegate Task PipelineDelegate(PipelineContext context);
